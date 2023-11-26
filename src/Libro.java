@@ -1,38 +1,33 @@
+import java.util.ArrayList;
+import java.util.List;
+
 interface Libro {
-    void prestar();
-    void devolver();
-    boolean prestado();
+    String isbn();
     String titulo();
     String autor();
     int anio();
 }
 
 class LibroImpl implements Libro {
+    private String isbn;
     private String titulo;
     private String autor;
     private int anio;
-    private boolean prestado;
 
     public LibroImpl(String titulo, String autor, int anio) {
+        this.isbn = randomString(10);
         this.titulo = titulo;
         this.autor = autor;
         this.anio = anio;
-        this.prestado = false;
+    }
+
+    private String randomString(int i) {
+        return "B"+Math.random() * 1000000000;
     }
 
     @Override
-    public void prestar() {
-        this.prestado = true;
-    }
-
-    @Override
-    public void devolver() {
-        this.prestado = false;
-    }
-
-    @Override
-    public boolean prestado() {
-        return this.prestado;
+    public String isbn() {
+        return this.isbn;
     }
 
     @Override
@@ -49,6 +44,11 @@ class LibroImpl implements Libro {
     public int anio() {
         return this.anio;
     }
+
+    @Override
+    public String toString() {
+        return this.isbn + " - " + this.titulo + " - " + this.autor + " - " + this.anio;
+    }
 }
 
 interface LibroFactory {
@@ -59,5 +59,45 @@ class LibroFactoryImpl implements LibroFactory {
     @Override
     public Libro crearLibro(String titulo, String autor, int anio) {
         return new LibroImpl(titulo, autor, anio);
+    }
+}
+
+interface LibroRepository {
+    void agregarLibro(Libro libro);
+    void eliminarLibro(Libro libro);
+    Libro obtenerLibro(String isbn);
+    List<Libro> obtenerLibros();
+}
+
+class LibroRepositoryImpl implements LibroRepository {
+    private List<Libro> libros;
+
+    public LibroRepositoryImpl() {
+        this.libros = new ArrayList<>();
+    }
+
+    @Override
+    public void agregarLibro(Libro libro) {
+        this.libros.add(libro);
+    }
+
+    @Override
+    public void eliminarLibro(Libro libro) {
+        this.libros.remove(libro);
+    }
+
+    @Override
+    public Libro obtenerLibro(String isbn) {
+        for (Libro libro : this.libros) {
+            if (libro.isbn().equals(isbn)) {
+                return libro;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Libro> obtenerLibros() {
+        return this.libros;
     }
 }
