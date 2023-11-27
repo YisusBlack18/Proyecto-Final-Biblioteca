@@ -21,33 +21,33 @@ public class Interfaz {
     }
 
     public void menuLibros() {
-        System.out.println("1. Agregar libro");
-        System.out.println("2. Eliminar libro");
-        System.out.println("3. Listar libros");
-        System.out.println("4. Salir");
+        System.out.print("1. Agregar libro\n");
+        System.out.print("2. Eliminar libro\n");
+        System.out.print("3. Listar libros\n");
+        System.out.print("4. Salir\n");
     }
 
     public void menuPrestamos() {
-        System.out.println("1. Prestar libro");
-        System.out.println("2. Devolver libro");
-        System.out.println("3. Listar préstamos");
-        System.out.println("4. Salir");
+        System.out.print("1. Prestar libro\n");
+        System.out.print("2. Devolver libro\n");
+        System.out.print("3. Listar préstamos\n");
+        System.out.print("4. Salir\n");
     }
 
     public void menuUsuarios() {
-        System.out.println("1. Agregar usuario");
-        System.out.println("2. Eliminar usuario");
-        System.out.println("3. Listar usuarios");
-        System.out.println("4. Salir");
+        System.out.print("1. Agregar usuario\n");
+        System.out.print("2. Eliminar usuario\n");
+        System.out.print("3. Listar usuarios\n");
+        System.out.print("4. Salir\n");
     }
 
     public void menuUsuario(Usuario usuario) {
-        System.out.println("Bienvenido " + usuario.nombre() + " " + usuario.apellido());
-        System.out.println("1. Listar libros");
-        System.out.println("2. Prestar libro");
-        System.out.println("3. Devolver libro");
-        System.out.println("4. Listar préstamos");
-        System.out.println("5. Salir");
+        System.out.print("Bienvenido " + usuario.nombre() + " " + usuario.apellido()+"\n");
+        System.out.print("1. Listar libros\n");
+        System.out.print("2. Prestar libro\n");
+        System.out.print("3. Devolver libro\n");
+        System.out.print("4. Listar préstamos\n");
+        System.out.print("5. Salir\n");
     }
 
     public void sistema(Libreria libreria) {
