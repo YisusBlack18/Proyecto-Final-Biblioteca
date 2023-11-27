@@ -53,6 +53,11 @@ public class Libreria {
         }
     }
 
+    public List<Libro> obtenerLibros() {
+        List<Libro> libros = libroRepository.obtenerLibros();
+        return libros;
+    }
+
     // Administrar préstamos
     public void prestarLibro(String isbn, String email) {
         Libro libro = libroRepository.obtenerLibro(isbn);
@@ -73,6 +78,11 @@ public class Libreria {
         for (Prestamo prestamo : prestamos) {
             System.out.println(prestamo.libro().titulo() + " - " + prestamo.usuario().nombre() + " - " + prestamo.usuario().apellido());
         }
+    }
+
+    public List<Prestamo> obtenerPrestamos() {
+        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
+        return prestamos;
     }
 
     // Administrar usuarios
@@ -96,6 +106,16 @@ public class Libreria {
         for (Usuario usuario : usuarios) {
             System.out.println(usuario.nombre() + " - " + usuario.apellido() + " - " + usuario.email());
         }
+    }
+
+    public Usuario obtenerUsuario(String email) {
+        Usuario usuario = usuarioRepository.buscarUsuario(email);
+        return usuario;
+    }
+
+    public List<Usuario> obtenerUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.listarUsuarios();
+        return usuarios;
     }
 
     public Usuario login(String email, String password) {
