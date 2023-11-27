@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import Interfaz.Interfaz;
 import Interfaz.UsuarioImpl;
 class InterfazTest {
-
+//comit
     private Interfaz interfaz;
     private ByteArrayOutputStream outputStream;
     private ByteArrayInputStream inputStream;
