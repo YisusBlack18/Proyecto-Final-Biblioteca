@@ -1,21 +1,23 @@
+package Interfaz;
+
 import java.util.Scanner;
 
 public class Interfaz {
     static Scanner scanner = new Scanner(System.in);
 
     public void menuPrincipal() {
-        System.out.println("Bienvenido a la librería");
-        System.out.println("1. Iniciar sesión");
-        System.out.println("2. Registrarse");
-        System.out.println("3. Salir");
+        System.out.print("Bienvenido a la librería\n");
+        System.out.print("1. Iniciar sesión\n");
+        System.out.print("2. Registrarse\n");
+        System.out.print("3. Salir\n");
     }
 
     public void menuAdmin(Usuario usuario) {
-        System.out.println("Bienvenido " + usuario.nombre() + " " + usuario.apellido());
-        System.out.println("1. Administrar libros");
-        System.out.println("2. Administrar préstamos");
-        System.out.println("3. Administrar usuarios");
-        System.out.println("4. Salir");
+        System.out.print("Bienvenido " + usuario.nombre() + " " + usuario.apellido()+ "\n");
+        System.out.print("1. Administrar libros\n");
+        System.out.print("2. Administrar préstamos\n");
+        System.out.print("3. Administrar usuarios\n");
+        System.out.print("4. Salir\n");
     }
 
     public void menuLibros() {
