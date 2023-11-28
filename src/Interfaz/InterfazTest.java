@@ -4,13 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import Interfaz.Interfaz;
-import Interfaz.UsuarioImpl;
 class InterfazTest {
 //comit
     private Interfaz interfaz;
@@ -73,3 +69,4 @@ class InterfazTest {
         System.setIn(inputStream);
     }
 }
+
