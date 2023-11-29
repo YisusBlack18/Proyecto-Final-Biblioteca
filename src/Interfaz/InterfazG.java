@@ -294,15 +294,26 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para eliminar un usuario
-                if (emailField.getText().equals("")) {
+                String email = emailField.getText();
+                if (email.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
+                }
+
+                Usuario usuario = libreria.obtenerUsuario(email);
+                if (usuario != null) {
+                    if (libreria.obtenerUsuariosPrestados().contains(usuario)) {
+                        JOptionPane.showMessageDialog(null, "El usuario tiene préstamos. No se puede eliminar.");
+                    } else {
+                        libreria.eliminarUsuario(email);
+                        JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+                    }
                 } else {
-                    libreria.eliminarUsuario(emailField.getText());
-                    JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+                    JOptionPane.showMessageDialog(null, "El usuario no existe");
                 }
             }
         });
+
 
         JButton cancelarEliminarButton = new JButton("Cancelar");
         cancelarEliminarButton.addActionListener(new ActionListener() {
@@ -485,10 +496,9 @@ public class InterfazG extends JFrame {
         JPanel agregarLibroPanel = new JPanel();
         agregarLibroPanel.setLayout(new GridLayout(5, 2));
 
-        nombreField = new JTextField();
-        apellidoField = new JTextField();
-        emailField = new JTextField();
-        passwordField = new JPasswordField();
+        tituloField = new JTextField();
+        autorField = new JTextField();
+        anioField = new JTextField();
 
         JButton agregarButton = new JButton("Agregar");
         agregarButton.addActionListener(new ActionListener() {
@@ -505,7 +515,6 @@ public class InterfazG extends JFrame {
                     libreria.agregarLibro(tituloField.getText(), autorField.getText(), Integer.parseInt(anioField.getText()));
                     JOptionPane.showMessageDialog(null, "Libro agregado exitosamente");
                 }
-                
             }
         });
 
@@ -543,15 +552,26 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para eliminar un libro
-                if (isbnField.getText().equals("")) {
+                String isbn = isbnField.getText();
+                if (isbn.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
+                }
+
+                Libro libro = libreria.obtenerLibro(isbn);
+                if (libro != null) {
+                    if (libreria.obtenerLibrosPrestados().contains(libro)) {
+                        JOptionPane.showMessageDialog(null, "El libro está prestado");
+                    } else {
+                        libreria.eliminarLibro(isbn);
+                        JOptionPane.showMessageDialog(null, "Libro eliminado exitosamente");
+                    }
                 } else {
-                    libreria.eliminarLibro(isbnField.getText());
-                    JOptionPane.showMessageDialog(null, "Libro eliminado exitosamente");
+                    JOptionPane.showMessageDialog(null, "El libro no existe");
                 }
             }
         });
+
 
         JButton cancelarEliminarButton = new JButton("Cancelar");
         cancelarEliminarButton.addActionListener(new ActionListener() {
@@ -847,26 +867,20 @@ public class InterfazG extends JFrame {
                     return;
                 }
 
-                Libro libro = libreria.obtenerLibro(isbn);
-                Usuario usuario = libreria.obtenerUsuario(email);
-                if (libro != null && usuario != null) {
-                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
-                    if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
-                        JOptionPane.showMessageDialog(null, "El libro no está prestado");
+                Prestamo prestamo = libreria.obtenerPrestamo(isbn, email);
+                if (prestamo != null) {
+                    libreria.devolverLibro(isbn, email);
+                    if (!libreria.obtenerPrestamos().contains(prestamo)) {
+                        JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
                     } else {
-                        libreria.devolverLibro(isbn, email);
-                        if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
-                            JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
-                        }
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
                     }
-                } else if (libro == null) {
+                } else if (libreria.obtenerLibro(isbn) == null) {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
-                    return;
-                } else if (usuario == null) {
+                } else if (libreria.obtenerUsuario(email) == null) {
                     JOptionPane.showMessageDialog(null, "El usuario no existe");
-                    return;
+                } else {
+                    JOptionPane.showMessageDialog(null, "El libro no está prestado");
                 }
             }
         });

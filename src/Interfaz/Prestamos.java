@@ -47,6 +47,7 @@ interface PrestamosRepository {
     List<Prestamo> obtenerPrestamos();
     Prestamo obtenerPrestamo(String isbn, String email);
     List<Libro> obtenerLibrosPrestados();
+    List<Usuario> obtenerUsuariosPrestados();
 }
 
 class PrestamosRepositoryImpl implements PrestamosRepository {
@@ -102,5 +103,14 @@ class PrestamosRepositoryImpl implements PrestamosRepository {
             libros.add(prestamo.libro());
         }
         return libros;
+    }
+
+    @Override
+    public List<Usuario> obtenerUsuariosPrestados() {
+        List<Usuario> usuarios = new ArrayList<>();
+        for (Prestamo prestamo : this.prestamos) {
+            usuarios.add(prestamo.usuario());
+        }
+        return usuarios;
     }
 }

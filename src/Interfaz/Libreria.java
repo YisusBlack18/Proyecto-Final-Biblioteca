@@ -99,6 +99,11 @@ public class Libreria {
         return libros;
     }
 
+    public List<Usuario> obtenerUsuariosPrestados() {
+        List<Usuario> usuarios = prestamosRepository.obtenerUsuariosPrestados();
+        return usuarios;
+    }
+
     // Administrar usuarios
     public void agregarUsuario(String nombre, String apellido, String email, String password) {
         Usuario usuario = usuarioFactory.crearUsuario(nombre, apellido, email, password);
