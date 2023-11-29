@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+ * Autor: Luis Romo
+ */
+
 public class PrestamoTest {
 
     private PrestamosRepository prestamosRepository;
@@ -17,7 +21,6 @@ public class PrestamoTest {
         libroRepository = new LibroRepositoryImpl();
         usuarioRepository = new UsuarioRepositoryImpl();
     }
-
 
     @Test
     void testPrestarLibro() {

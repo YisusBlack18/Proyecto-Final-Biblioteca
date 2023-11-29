@@ -2,6 +2,10 @@ package Interfaz;
 
 import javax.swing.SwingUtilities;
 
+/*
+ * Autor: YisusBlack18
+ */
+
 public class App {
 
     public void ejecutarEnTerminal() {

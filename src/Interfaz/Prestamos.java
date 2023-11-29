@@ -2,6 +2,7 @@ package Interfaz;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 class Prestamo {
     private Libro libro;
@@ -18,6 +19,24 @@ class Prestamo {
 
     public Usuario usuario() {
         return this.usuario;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Prestamo prestamo = (Prestamo) obj;
+        return Objects.equals(libro, prestamo.libro) &&
+            Objects.equals(usuario, prestamo.usuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(libro, usuario);
     }
 }
 

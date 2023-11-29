@@ -6,6 +6,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+ * Autor: Ale Quirarte
+ */
+
 public class UsuariosTest {
     private UsuarioFactoryImpl usuarioFactory;
     private UsuarioRepositoryImpl usuarioRepository;

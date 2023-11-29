@@ -248,7 +248,7 @@ public class InterfazG extends JFrame {
                     return;
                 } else if (tipo.equals("admin")) {
                     libreria.agregarAdmin(nombreField.getText(), apellidoField.getText(), emailField.getText(), passwordField.getText());
-                    JOptionPane.showMessageDialog(null, "Usuario agregado exitosamente");
+                    JOptionPane.showMessageDialog(null, "Administrador agregado exitosamente");
                 } else if (tipo.equals("usuario")) {
                     libreria.agregarUsuario(nombreField.getText(), apellidoField.getText(), emailField.getText(), passwordField.getText());
                     JOptionPane.showMessageDialog(null, "Usuario agregado exitosamente");
@@ -294,7 +294,13 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para eliminar un usuario
-                libreria.eliminarUsuario(emailField.getText());
+                if (emailField.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+                    return;
+                } else {
+                    libreria.eliminarUsuario(emailField.getText());
+                    JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+                }
             }
         });
 
@@ -537,7 +543,13 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para eliminar un libro
-                libreria.eliminarLibro(isbnField.getText());
+                if (isbnField.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
+                    return;
+                } else {
+                    libreria.eliminarLibro(isbnField.getText());
+                    JOptionPane.showMessageDialog(null, "Libro eliminado exitosamente");
+                }
             }
         });
 
@@ -710,28 +722,30 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para prestar un libro
-                if (isbnField.getText().equals("") || emailField.getText().equals("")) {
+                String isbn = isbnField.getText();
+                String email = emailField.getText();
+                if (isbn.equals("") || email.equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
-                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
-                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
-                    return;
-                } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
-                    JOptionPane.showMessageDialog(null, "El libro no existe");
-                    return;
-                } else if (libreria.obtenerUsuario(emailField.getText()) == null) {
-                    JOptionPane.showMessageDialog(null, "El usuario no existe");
-                    return;
-                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
-                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
-                    return;
-                } else {
-                    libreria.prestarLibro(isbnField.getText(), emailField.getText());
-                    if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
-                        JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
+                }
+
+                Libro libro = libreria.obtenerLibro(isbn);
+                Usuario usuario = libreria.obtenerUsuario(email);
+                if (libro != null && usuario != null) {
+                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
+                    if (libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                        JOptionPane.showMessageDialog(null, "El libro ya está prestado");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
+                        libreria.prestarLibro(isbn, email);
+                        if (libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                            JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
+                        }
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "El libro o el usuario no existen");
+                    return;
                 }
             }
         });
@@ -768,28 +782,32 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para prestar un libro
-                if (isbnField.getText().equals("")) {
+                String isbn = isbnField.getText();
+                if (isbn.equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
-                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
-                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
-                    return;
-                } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
+                }
+
+                Libro libro = libreria.obtenerLibro(isbn);
+                if (libro != null) {
+                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
+                    if (libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                        JOptionPane.showMessageDialog(null, "El libro ya está prestado");
+                    } else {
+                        libreria.prestarLibro(isbn, usuario.email());
+                        if (libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                            JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
+                        }
+                    }
+                } else {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
                     return;
-                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
-                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
-                    return;
-                } else {
-                    libreria.prestarLibro(isbnField.getText(), usuario.email());
-                    if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
-                        JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
-                    }
                 }
             }
         });
+
 
         JButton cancelarPrestarButton = new JButton("Cancelar");
         cancelarPrestarButton.addActionListener(new ActionListener() {
@@ -822,20 +840,33 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para devolver un libro
-                if (isbnField.getText().equals("") || emailField.getText().equals("")) {
+                String isbn = isbnField.getText();
+                String email = emailField.getText();
+                if (isbn.equals("") || email.equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
-                } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
+                }
+
+                Libro libro = libreria.obtenerLibro(isbn);
+                Usuario usuario = libreria.obtenerUsuario(email);
+                if (libro != null && usuario != null) {
+                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
+                    if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                        JOptionPane.showMessageDialog(null, "El libro no está prestado");
+                    } else {
+                        libreria.devolverLibro(isbn, email);
+                        if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                            JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
+                        }
+                    }
+                } else if (libro == null) {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
                     return;
-                } else if (libreria.obtenerUsuario(emailField.getText()) == null) {
+                } else if (usuario == null) {
                     JOptionPane.showMessageDialog(null, "El usuario no existe");
                     return;
-                } else if (!libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
-                    JOptionPane.showMessageDialog(null, "El libro no está prestado");
-                    return;
-                } else {
-                    libreria.devolverLibro(isbnField.getText(), emailField.getText());
                 }
             }
         });
@@ -872,17 +903,28 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para devolver un libro
-                if (isbnField.getText().equals("")) {
+                String isbn = isbnField.getText();
+                if (isbn.equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
-                } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
+                }
+
+                Libro libro = libreria.obtenerLibro(isbn);
+                if (libro != null) {
+                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
+                    if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                        JOptionPane.showMessageDialog(null, "El libro no está prestado");
+                    } else {
+                        libreria.devolverLibro(isbn, usuario.email());
+                        if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
+                            JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
+                        }
+                    }
+                } else {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
                     return;
-                } else if (!libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
-                    JOptionPane.showMessageDialog(null, "El libro no está prestado");
-                    return;
-                } else {
-                    libreria.devolverLibro(isbnField.getText(), usuario.email());
                 }
             }
         });

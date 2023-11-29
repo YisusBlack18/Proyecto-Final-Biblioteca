@@ -51,6 +51,20 @@ class LibroImpl implements Libro {
     public String toString() {
         return this.isbn + " - " + this.titulo + " - " + this.autor + " - " + this.anio;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Libro) {
+            Libro libro = (Libro) obj;
+            return this.isbn.equals(libro.isbn());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.isbn.hashCode();
+    }
 }
 
  interface LibroFactory {
