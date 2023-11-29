@@ -3,7 +3,7 @@ package Interfaz;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Libro {
+interface Libro {
     String isbn();
     String titulo();
     String autor();
@@ -67,7 +67,7 @@ class LibroImpl implements Libro {
     }
 }
 
- interface LibroFactory {
+interface LibroFactory {
     Libro crearLibro(String titulo, String autor, int anio);
 }
 
@@ -78,14 +78,14 @@ class LibroFactoryImpl implements LibroFactory {
     }
 }
 
- interface LibroRepository {
+interface LibroRepository {
     void agregarLibro(Libro libro);
     void eliminarLibro(Libro libro);
     Libro obtenerLibro(String isbn);
     List<Libro> obtenerLibros();
 }
 
-  class LibroRepositoryImpl implements LibroRepository {
+class LibroRepositoryImpl implements LibroRepository {
     private List<Libro> libros;
 
     public LibroRepositoryImpl() {

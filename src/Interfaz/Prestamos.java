@@ -30,8 +30,8 @@ class Prestamo {
             return false;
         }
         Prestamo prestamo = (Prestamo) obj;
-        return Objects.equals(libro, prestamo.libro) &&
-            Objects.equals(usuario, prestamo.usuario);
+        return Objects.equals(libro, prestamo.libro()) &&
+            Objects.equals(usuario, prestamo.usuario());
     }
 
     @Override
@@ -43,7 +43,10 @@ class Prestamo {
 interface PrestamosRepository {
     void prestarLibro(Libro libro, Usuario usuario);
     void devolverLibro(Libro libro, Usuario usuario);
+    Libro obtenerLibroPrestado(String isbn);
     List<Prestamo> obtenerPrestamos();
+    Prestamo obtenerPrestamo(String isbn, String email);
+    List<Libro> obtenerLibrosPrestados();
 }
 
 class PrestamosRepositoryImpl implements PrestamosRepository {
@@ -61,12 +64,43 @@ class PrestamosRepositoryImpl implements PrestamosRepository {
 
     @Override
     public void devolverLibro(Libro libro, Usuario usuario) {
-        Prestamo prestamo = new Prestamo(libro, usuario);
-        this.prestamos.remove(prestamo);
+        Prestamo prestamo = obtenerPrestamo(libro.isbn(), usuario.email());
+        if (prestamo != null) {
+            this.prestamos.remove(prestamo);
+        }
+    }
+
+    @Override
+    public Prestamo obtenerPrestamo(String isbn, String email) {
+        for (Prestamo prestamo : this.prestamos) {
+            if (prestamo.libro().isbn().equals(isbn) && prestamo.usuario().email().equals(email)) {
+                return prestamo;
+            }
+        }
+        return null;
     }
 
     @Override
     public List<Prestamo> obtenerPrestamos() {
         return this.prestamos;
+    }
+
+    @Override
+    public Libro obtenerLibroPrestado(String isbn) {
+        for (Prestamo prestamo : this.prestamos) {
+            if (prestamo.libro().isbn().equals(isbn)) {
+                return prestamo.libro();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Libro> obtenerLibrosPrestados() {
+        List<Libro> libros = new ArrayList<>();
+        for (Prestamo prestamo : this.prestamos) {
+            libros.add(prestamo.libro());
+        }
+        return libros;
     }
 }

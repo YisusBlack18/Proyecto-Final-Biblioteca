@@ -909,25 +909,22 @@ public class InterfazG extends JFrame {
                     return;
                 }
 
-                Libro libro = libreria.obtenerLibro(isbn);
-                if (libro != null) {
-                    Prestamo nuevoPrestamo = new Prestamo(libro, usuario);
-                    if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
-                        JOptionPane.showMessageDialog(null, "El libro no está prestado");
+                Prestamo prestamo = libreria.obtenerPrestamo(isbn, usuario.email());
+                if (prestamo != null) {
+                    libreria.devolverLibro(isbn, usuario.email());
+                    if (!libreria.obtenerPrestamos().contains(prestamo)) {
+                        JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
                     } else {
-                        libreria.devolverLibro(isbn, usuario.email());
-                        if (!libreria.obtenerPrestamos().contains(nuevoPrestamo)) {
-                            JOptionPane.showMessageDialog(null, "Libro devuelto exitosamente");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
-                        }
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al devolver el libro");
                     }
-                } else {
+                } else if (libreria.obtenerLibro(isbn) == null) {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
-                    return;
+                } else {
+                    JOptionPane.showMessageDialog(null, "El libro no está prestado");
                 }
             }
         });
+
 
         JButton cancelarDevolverButton = new JButton("Cancelar");
         cancelarDevolverButton.addActionListener(new ActionListener() {

@@ -20,33 +20,47 @@ public class PrestamoTest {
         prestamosRepository = new PrestamosRepositoryImpl();
         libroRepository = new LibroRepositoryImpl();
         usuarioRepository = new UsuarioRepositoryImpl();
+
+        Libro libro = new LibroImpl("El señor de las moscas", "William Golding", 1954);
+        libroRepository.agregarLibro(libro);
+        Usuario usuario = new UsuarioImpl("Juan", "Perez", "juan@gmail.com", "1234");
+        usuarioRepository.agregarUsuario(usuario);
     }
 
     @Test
     void testPrestarLibro() {
-        Libro libro = libroRepository.obtenerLibro("1954");
-        Usuario usuario = usuarioRepository.buscarUsuario("admin@gmail.com");
+        // prueba de prestamo de libro
+        Libro libro = libroRepository.obtenerLibros().get(0);
+        Usuario usuario = usuarioRepository.buscarUsuario("juan@gmail.com");
+
         prestamosRepository.prestarLibro(libro, usuario);
-
         List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
-        Prestamo prestamoTest = prestamos.get(prestamos.size() - 1);
 
-        assertEquals(libro, prestamoTest.libro());
+        assertEquals(1, prestamos.size());
     }
 
     @Test
     void testDevolverLibro() {
-        Libro libro = libroRepository.obtenerLibro("1954");
-        Usuario usuario = usuarioRepository.buscarUsuario("admin@gmail.com");
+        // prueba de devolucion de libro
+        Libro libro = libroRepository.obtenerLibros().get(0);
+        Usuario usuario = usuarioRepository.buscarUsuario("juan@gmail.com");
 
         prestamosRepository.prestarLibro(libro, usuario);
-
-        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
-        Prestamo prestamoTest = prestamos.get(prestamos.size() - 1);
-
         prestamosRepository.devolverLibro(libro, usuario);
+        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
 
+        assertEquals(0, prestamos.size());
+    }
 
-        assertEquals(libro,prestamoTest.libro());
+    @Test
+    void testObtenerPrestamos() {
+        // prueba de obtener prestamos
+        Libro libro = libroRepository.obtenerLibros().get(0);
+        Usuario usuario = usuarioRepository.buscarUsuario("juan@gmail.com");
+
+        prestamosRepository.prestarLibro(libro, usuario);
+        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
+
+        assertEquals(1, prestamos.size());
     }
 }

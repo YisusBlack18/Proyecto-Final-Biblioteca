@@ -43,7 +43,11 @@ public class Libreria {
     }
 
     public Libro obtenerLibro(String isbn) {
-        return libroRepository.obtenerLibro(isbn);
+        Libro libro = libroRepository.obtenerLibro(isbn);
+        if (libro == null) {
+            libro = prestamosRepository.obtenerLibroPrestado(isbn);
+        }
+        return libro;
     }
 
     public void listarLibros() {
@@ -60,15 +64,15 @@ public class Libreria {
 
     // Administrar préstamos
     public void prestarLibro(String isbn, String email) {
-        Libro libro = libroRepository.obtenerLibro(isbn);
-        Usuario usuario = usuarioRepository.buscarUsuario(email);
+        Libro libro = obtenerLibro(isbn);
+        Usuario usuario = obtenerUsuario(email);
         libroRepository.eliminarLibro(libro);
         prestamosRepository.prestarLibro(libro, usuario);
     }
 
     public void devolverLibro(String isbn, String email) {
-        Libro libro = libroRepository.obtenerLibro(isbn);
-        Usuario usuario = usuarioRepository.buscarUsuario(email);
+        Libro libro = obtenerLibro(isbn);
+        Usuario usuario = obtenerUsuario(email);
         prestamosRepository.devolverLibro(libro, usuario);
         libroRepository.agregarLibro(libro);
     }
@@ -80,9 +84,19 @@ public class Libreria {
         }
     }
 
+    public Prestamo obtenerPrestamo(String isbn, String email) {
+        Prestamo prestamo = prestamosRepository.obtenerPrestamo(isbn, email);
+        return prestamo;
+    }
+
     public List<Prestamo> obtenerPrestamos() {
         List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
         return prestamos;
+    }
+
+    public List<Libro> obtenerLibrosPrestados() {
+        List<Libro> libros = prestamosRepository.obtenerLibrosPrestados();
+        return libros;
     }
 
     // Administrar usuarios
