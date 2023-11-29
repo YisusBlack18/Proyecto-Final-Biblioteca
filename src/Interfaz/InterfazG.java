@@ -370,7 +370,7 @@ public class InterfazG extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Lógica para listar libros
-                mostrarPanelListarLibros();
+                mostrarPanelListarLibrosUsuario();
             }
         });
     
@@ -603,6 +603,50 @@ public class InterfazG extends JFrame {
         repaint();
     }
 
+    private void mostrarPanelListarLibrosUsuario() {
+        // Lógica para mostrar el panel de listar libros
+        JPanel listarLibrosPanel = new JPanel();
+        listarLibrosPanel.setLayout(new GridLayout(5, 1));
+
+        for (Libro libro : libreria.obtenerLibros()) {
+            JLabel libroLabel = new JLabel(libro.isbn() + " - " + libro.titulo() + " - " + libro.autor() + " - " + libro.anio());
+            libroLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+                    StringSelection stringSelection = new StringSelection(libro.isbn());
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(stringSelection, null);
+                    JOptionPane.showMessageDialog(null, "ISBN copiado al portapapeles");
+                }
+
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
+                    libroLabel.setForeground(Color.BLUE);
+                }
+
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent e) {
+                    libroLabel.setForeground(Color.BLACK);
+                }
+            });
+            listarLibrosPanel.add(libroLabel);
+        }
+
+        JButton salirListarLibrosButton = new JButton("Salir");
+        salirListarLibrosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarPanelUsuario();
+            }
+        });
+
+        listarLibrosPanel.add(salirListarLibrosButton);
+
+        setContentPane(listarLibrosPanel);
+        revalidate();
+        repaint();
+    }
+
     private void mostrarPanelPrestamos() {
         // Lógica para mostrar el panel de administración de préstamos
         JPanel prestamosPanel = new JPanel();
@@ -669,6 +713,9 @@ public class InterfazG extends JFrame {
                 if (isbnField.getText().equals("") || emailField.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
+                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
+                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
+                    return;
                 } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
                     return;
@@ -680,6 +727,11 @@ public class InterfazG extends JFrame {
                     return;
                 } else {
                     libreria.prestarLibro(isbnField.getText(), emailField.getText());
+                    if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), libreria.obtenerUsuario(emailField.getText())))) {
+                        JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
+                    }
                 }
             }
         });
@@ -719,6 +771,9 @@ public class InterfazG extends JFrame {
                 if (isbnField.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
                     return;
+                } else if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
+                    JOptionPane.showMessageDialog(null, "El libro ya está prestado");
+                    return;
                 } else if (libreria.obtenerLibro(isbnField.getText()) == null) {
                     JOptionPane.showMessageDialog(null, "El libro no existe");
                     return;
@@ -727,6 +782,11 @@ public class InterfazG extends JFrame {
                     return;
                 } else {
                     libreria.prestarLibro(isbnField.getText(), usuario.email());
+                    if (libreria.obtenerPrestamos().contains(new Prestamo(libreria.obtenerLibro(isbnField.getText()), usuario))) {
+                        JOptionPane.showMessageDialog(null, "Libro prestado exitosamente");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ocurrió un error al prestar el libro");
+                    }
                 }
             }
         });

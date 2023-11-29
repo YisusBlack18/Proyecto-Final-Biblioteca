@@ -2,7 +2,7 @@ package Interfaz;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrestamoTest {
@@ -18,15 +18,17 @@ public class PrestamoTest {
         usuarioRepository = new UsuarioRepositoryImpl();
     }
 
+
     @Test
     void testPrestarLibro() {
         Libro libro = libroRepository.obtenerLibro("1954");
         Usuario usuario = usuarioRepository.buscarUsuario("admin@gmail.com");
         prestamosRepository.prestarLibro(libro, usuario);
 
-        Prestamo prestamoTest = prestamosRepository.obtenerPrestamos().getLast();
+        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
+        Prestamo prestamoTest = prestamos.get(prestamos.size() - 1);
 
-        assertEquals(libro,prestamoTest.libro());
+        assertEquals(libro, prestamoTest.libro());
     }
 
     @Test
@@ -36,7 +38,8 @@ public class PrestamoTest {
 
         prestamosRepository.prestarLibro(libro, usuario);
 
-        Prestamo prestamoTest = prestamosRepository.obtenerPrestamos().getLast();
+        List<Prestamo> prestamos = prestamosRepository.obtenerPrestamos();
+        Prestamo prestamoTest = prestamos.get(prestamos.size() - 1);
 
         prestamosRepository.devolverLibro(libro, usuario);
 
